@@ -1,12 +1,11 @@
 ---
-strategy:
-  matrix:
-    javaversion: [8, 13, 15]
-
 name: CI for Java Invoice
 on: [push]
 jobs:
   test:
+    strategy:
+      matrix:
+        javaversion: [8, 13, 15]
     name: Unit tests
     runs-on: ubuntu-latest
     steps:
