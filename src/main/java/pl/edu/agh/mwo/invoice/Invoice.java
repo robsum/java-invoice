@@ -51,4 +51,16 @@ public class Invoice {
     public int getNumber() {
         return this.number;
     }
+
+    public String getItems() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.getNumber());
+        stringBuilder.append('\n');
+        for (Product product : products.keySet()) {
+            stringBuilder.append(product.getName() + " " + products.get(product) + " " + product.getPrice() + "\n");
+        }
+
+        stringBuilder.append("Liczba pozycji: " + String.valueOf(products.size()));
+        return stringBuilder.toString();
+    }
 }

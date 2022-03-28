@@ -142,4 +142,21 @@ public class InvoiceTest {
         int number2 = new Invoice().getNumber();
         Assert.assertNotEquals(number1, number2);
     }
+
+    @Test
+    public void invoiceGetItems0() {
+        int number = invoice.getNumber();
+        Assert.assertEquals(number + "\nLiczba pozycji: 0", invoice.getItems());
+    }
+
+    @Test
+    public void invoiceGetItems1() {
+        int number = invoice.getNumber();
+        Product product = new DairyProduct("ser żółty", BigDecimal.valueOf(20.0));
+        invoice.addProduct(product);
+        Assert.assertEquals(
+                number + "\nser żółty 1 20.0\nLiczba pozycji: 1",
+                invoice.getItems()
+        );
+    }
 }
