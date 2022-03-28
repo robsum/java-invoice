@@ -8,10 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import pl.edu.agh.mwo.invoice.Invoice;
-import pl.edu.agh.mwo.invoice.product.DairyProduct;
-import pl.edu.agh.mwo.invoice.product.OtherProduct;
-import pl.edu.agh.mwo.invoice.product.Product;
-import pl.edu.agh.mwo.invoice.product.TaxFreeProduct;
+import pl.edu.agh.mwo.invoice.product.*;
 
 public class InvoiceTest {
     private Invoice invoice;
@@ -168,5 +165,11 @@ public class InvoiceTest {
         invoice.addProduct(p2);
 
         Assert.assertEquals(1, invoice.getProducts().size());
+    }
+
+    @Test
+    public void exciseBottleOfWineTest() {
+        Product wine = new BottleOfWine("chardonay", BigDecimal.valueOf(10.0));
+        Assert.assertTrue(BigDecimal.valueOf(17.86).compareTo(wine.getPriceWithTax()) == 0);
     }
 }
