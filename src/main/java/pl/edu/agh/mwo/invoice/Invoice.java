@@ -23,7 +23,7 @@ public class Invoice {
         if (product == null || quantity <= 0) {
             throw new IllegalArgumentException();
         }
-        products.put(product, quantity);
+        products.put(product, products.getOrDefault(product, 0) + quantity);
     }
 
     public BigDecimal getNetTotal() {
@@ -63,5 +63,9 @@ public class Invoice {
 
         stringBuilder.append("Liczba pozycji: " + String.valueOf(products.size()));
         return stringBuilder.toString();
+    }
+
+    public Map<Product, Integer> getProducts() {
+        return this.products;
     }
 }

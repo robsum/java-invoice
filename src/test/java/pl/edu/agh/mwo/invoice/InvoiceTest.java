@@ -159,4 +159,14 @@ public class InvoiceTest {
                 invoice.getItems()
         );
     }
+
+    @Test
+    public void duplicates2() {
+        Product p1 = new DairyProduct("ser żółty", BigDecimal.valueOf(20.0));
+        Product p2 = new DairyProduct("ser żółty", BigDecimal.valueOf(20.0));
+        invoice.addProduct(p1);
+        invoice.addProduct(p2);
+
+        Assert.assertEquals(1, invoice.getProducts().size());
+    }
 }
