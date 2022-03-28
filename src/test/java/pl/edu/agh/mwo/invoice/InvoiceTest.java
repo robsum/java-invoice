@@ -172,4 +172,10 @@ public class InvoiceTest {
         Product wine = new BottleOfWine("chardonay", BigDecimal.valueOf(10.0));
         Assert.assertTrue(BigDecimal.valueOf(17.86).compareTo(wine.getPriceWithTax()) == 0);
     }
+
+    @Test
+    public void exciseFuelCanisterTest() {
+        Product fuel = new FuelCanister("gasoline", BigDecimal.valueOf(10.0));
+        Assert.assertTrue(BigDecimal.valueOf(17.86).compareTo(fuel.getPriceWithTax()) == 0);
+    }
 }
