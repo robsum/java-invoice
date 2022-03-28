@@ -9,10 +9,11 @@ import pl.edu.agh.mwo.invoice.product.Product;
 
 public class Invoice {
     private int number;
+    static int nextNumber = 1;
     private Map<Product, Integer> products = new HashMap<Product, Integer>();
 
     public Invoice() {
-        this.number = new Random().nextInt(999999) + 1;
+        this.number = nextNumber++;
     }
 
     public void addProduct(Product product) {
@@ -49,6 +50,6 @@ public class Invoice {
     }
 
     public int getNumber() {
-        return 1;
+        return this.number;
     }
 }
