@@ -1,71 +1,71 @@
 package pl.edu.agh.mwo.invoice;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.Random;
 import pl.edu.agh.mwo.invoice.product.Product;
 
 public class Invoice {
-    // two implementations
-    private Collection<Product> products;
-    private Map<Product, Integer> productsMap;
+    private int number;
+    static int nextNumber = 1;
+    private Map<Product, Integer> products = new HashMap<Product, Integer>();
 
     public Invoice() {
-        products = new ArrayList<>();
-        productsMap = new HashMap<>();
+        this.number = nextNumber++;
     }
 
     public void addProduct(Product product) {
-        products.add(product);
-        productsMap.put(product, productsMap.getOrDefault(product, 0) + 1);
+        addProduct(product, 1);
     }
 
     public void addProduct(Product product, Integer quantity) {
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity cannot be less or equal to 0.");
+        if (product == null || quantity <= 0) {
+            throw new IllegalArgumentException();
         }
-        for (int i = 0; i < quantity; ++i) {
-            products.add(product);
-        }
-        productsMap.put(product, productsMap.getOrDefault(product, 0) + quantity);
+        products.put(product, products.getOrDefault(product, 0) + quantity);
     }
 
-    public BigDecimal getSubtotal() {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (Product product : products) {
-            sum = sum.add(product.getPrice());
+    public BigDecimal getNetTotal() {
+        BigDecimal totalNet = BigDecimal.ZERO;
+        for (Product product : products.keySet()) {
+            BigDecimal quantity = new BigDecimal(products.get(product));
+            totalNet = totalNet.add(product.getPrice().multiply(quantity));
         }
-        BigDecimal sumMap = BigDecimal.ZERO;
-        for (Product product : productsMap.keySet()) {
-            sumMap = sumMap.add(new BigDecimal(productsMap.get(product)).multiply(product.getPrice()));
-        }
-        return sumMap;
+        return totalNet;
     }
 
-    public BigDecimal getTax() {
-        BigDecimal tax = BigDecimal.ZERO;
-        for (Product product : products) {
-            tax = tax.add(product.getTaxPercent().multiply(product.getPrice()));
-        }
-        BigDecimal taxMap = BigDecimal.ZERO;
-        for (Product product : productsMap.keySet()) {
-            taxMap = taxMap.add(new BigDecimal(productsMap.get(product)).multiply(product.getTaxPercent()).multiply(product.getPrice()));
-        }
-        return taxMap;
+    public BigDecimal getTaxTotal() {
+        return getGrossTotal().subtract(getNetTotal());
     }
 
-    public BigDecimal getTotal() {
-        BigDecimal total = BigDecimal.ZERO;
-        for (Product product : products) {
-            total = total.add(product.getPriceWithTax());
+    public BigDecimal getGrossTotal() {
+        BigDecimal totalGross = BigDecimal.ZERO;
+        for (Product product : products.keySet()) {
+            BigDecimal quantity = new BigDecimal(products.get(product));
+            totalGross = totalGross.add(product.getPriceWithTax().multiply(quantity));
         }
-        BigDecimal totalMap = BigDecimal.ZERO;
-        for (Product product : productsMap.keySet()) {
-            totalMap = totalMap.add(new BigDecimal(productsMap.get(product)).multiply(product.getPriceWithTax()));
+        return totalGross;
+    }
+
+    public int getNumber() {
+        return this.number;
+    }
+
+    public String getItems() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(this.getNumber());
+        stringBuilder.append('\n');
+        for (Product product : products.keySet()) {
+            stringBuilder.append(product.getName() + " "
+                    + products.get(product) + " " + product.getPrice() + "\n");
         }
-        return totalMap;
+
+        stringBuilder.append("Liczba pozycji: " + String.valueOf(products.size()));
+        return stringBuilder.toString();
+    }
+
+    public Map<Product, Integer> getProducts() {
+        return this.products;
     }
 }
